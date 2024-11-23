@@ -18,12 +18,14 @@ const displayPosts = async (data) => {
     data.forEach(post => {
         const div = document.createElement("div");
         div.innerHTML = `
-        <div class="flex items-start bg-[#797DFC1A] border border-[#797DFC] rounded-2xl p-8 gap-6">
+        <div class="flex flex-col lg:flex-row items-center lg:items-start bg-[#797DFC1A] border border-[#797DFC] rounded-2xl p-8 gap-6">
             <div>
-                <div class="${post?.isActive ? 'bg-[#10B981] w-4 h-4 rounded-full relative -right-[70px] -bottom-2 border-2 border-white' : 'bg-[#FF3434] w-4 h-4 rounded-full relative -right-[70px] -bottom-2 border-2 border-white'}"></div>
-                <img class="rounded-xl w-20" src="${post.image}" alt="">
+                <div class="${post?.isActive ? 'bg-[#10B981] w-7 md:w-4 h-7 md:h-4 rounded-full relative -right-28 md:-right-[70px] -bottom-4 md:-bottom-2 border-2 border-white' : 'bg-[#FF3434] w-7 md:w-4 h-7 md:h-4 rounded-full relative -right-28 md:-right-[70px] -bottom-4 md:-bottom-2 border-2 border-white'}"></div>
+                <div class="rounded-xl w-32 md:w-20">
+                    <img class="rounded-xl w-32 md:w-20" src="${post.image}" alt="">
+                </div>
             </div>
-            <div class="space-y-6 flex-auto">
+            <div class="space-y-6 w-full lg:flex-1 text-center lg:text-start">
                     <span class="text-sm font-medium text-[#12132DCC] font-inter"># ${post.category}</span>
                     <span class="text-sm font-medium text-[#12132DCC] font-inter ml-4">Author: ${post.author?.name}</span>
                     <h1 class="text-[#12132D] text-xl font-bold">${post.title}</h1>
@@ -31,16 +33,16 @@ const displayPosts = async (data) => {
                     ${post.description}
                     </p>
                 <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-10">
-                        <div class="flex gap-4">
+                    <div class="flex items-center space-x-2 lg:space-x-10">
+                        <div class="flex gap-2 lg:gap-4">
                             <img src="images/comment.svg" alt="">
                             <span>${post.comment_count}</span>
                         </div>
-                        <div class="flex gap-4">
+                        <div class="flex gap-2 lg:gap-4">
                             <img src="images/view.svg" alt="">
                             <span>${post.view_count}</span>
                         </div>
-                        <div class="flex gap-4">
+                        <div class="flex gap-2 lg:gap-4">
                             <img src="images/time.svg" alt="">
                             <span>${post.posted_time}</span>
                         </div>
