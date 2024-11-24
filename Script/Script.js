@@ -5,7 +5,7 @@ const LoadAllPost = async (isRead) => {
     const data = await res.json();
     const posts = data.posts;
     if (!isRead) {
-        displayPosts(posts);
+        displayPosts(posts, data.message);
     }
     return (posts);
 };
@@ -13,12 +13,18 @@ LoadAllPost();
 
 
 // Display Data Function.
-const displayPosts = async (data, search) => {
-    // console.log(data, search);
+const displayPosts = async (data, message) => {
+    const loading = document.getElementById("loading");
+
+    // Show Post Container.
     const postContainer = document.getElementById("posts-container");
-    data.forEach(post => {
-        const div = document.createElement("div");
-        div.innerHTML = `
+    postContainer.textContent = "";
+    postContainer.classList.remove("hidden");
+
+    if (message === "successfully fetched the posts") {
+        data.forEach(post => {
+            const div = document.createElement("div");
+            div.innerHTML = `
         <div class="flex flex-col lg:flex-row items-center lg:items-start bg-[#797DFC1A] border border-[#797DFC] rounded-2xl p-8 gap-6">
             <div>
                 <div class="${post?.isActive ? 'bg-[#10B981] w-7 md:w-4 h-7 md:h-4 rounded-full relative -right-28 md:-right-[70px] -bottom-4 md:-bottom-2 border-2 border-white' : 'bg-[#FF3434] w-7 md:w-4 h-7 md:h-4 rounded-full relative -right-28 md:-right-[70px] -bottom-4 md:-bottom-2 border-2 border-white'}"></div>
@@ -55,9 +61,16 @@ const displayPosts = async (data, search) => {
             </div>
         </div>
         `
-        // console.log(post);
-        postContainer.appendChild(div);
-    })
+            // console.log(post);
+            postContainer.appendChild(div);
+        });
+    } else {
+        const p = document.createElement("p");
+        p.innerText = "No Posts Found!!";
+        postContainer.appendChild(p);
+    }
+
+    loading.classList.add("hidden");
 };
 
 
@@ -128,8 +141,19 @@ LoadLatestPost();
 const SearchPostData = async () => {
     const SearchInput = document.getElementById("search-input");
     const SearchText = SearchInput.value;
+
+    // Show Loading Spinner.
+    const loading = document.getElementById("loading");
+    loading.classList.remove("hidden");
+
+    // Hide Posts Container.
+    const postContainer = document.getElementById("posts-container");
+    postContainer.classList.add("hidden");
+
+    // Fetch Search Posts Data.
     const res = await fetch(`https://openapi.programming-hero.com/api/retro-forum/posts?category=${SearchText}`);
     const data = await res.json();
-    // displayPosts(data, "search");
-    console.log(data);
+    const posts = data.posts;
+    displayPosts(posts, data.message);
+    console.log(data)
 }
