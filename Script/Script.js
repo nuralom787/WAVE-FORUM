@@ -13,7 +13,8 @@ LoadAllPost();
 
 
 // Display Data Function.
-const displayPosts = async (data) => {
+const displayPosts = async (data, search) => {
+    // console.log(data, search);
     const postContainer = document.getElementById("posts-container");
     data.forEach(post => {
         const div = document.createElement("div");
@@ -83,3 +84,52 @@ const MarkAsRead = async (id) => {
     const readInt = parseInt(readCount.innerText)
     readCount.innerText = readInt + 1;
 };
+
+
+// Load Latest Post Function.
+const LoadLatestPost = async () => {
+    const LatestPostContainer = document.getElementById("latest-post-container");
+    const res = await fetch("https://openapi.programming-hero.com/api/retro-forum/latest-posts");
+    const data = await res.json();
+
+    data.forEach(post => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <div class="card bg-base-100 w-full border border-gray-300">
+            <figure class="px-8 pt-8">
+                <img src="${post.cover_image}" alt="Shoes" class="rounded-xl" />
+            </figure>
+            <div class="card-body space-y-2">
+                <div class="flex items-center gap-2">
+                    <img src="images/publish.svg" alt="">
+                    <p class="font-normal text-base text-[#12132D99]">${post.author?.posted_date || "No publish date"}</p>
+                </div>
+                <h1 class="card-title font-extrabold text-lg text-[#12132D]">${post.title}</h2>
+                <p class="font-normal text-base text-[#12132D99]">${post.description}</p>
+                <div class="card-actions">
+                    <div class="">
+                        <img class="w-12 h-12 rounded-full" src="${post.profile_image}" alt="">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-[#12132D]">${post?.author?.name}</h4>
+                        <p class="font-normal text-[#12132D99] text-sm">${post?.author?.designation || "Unknown"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        LatestPostContainer.appendChild(div)
+    });
+};
+LoadLatestPost();
+
+
+// Load Post By Search Requirement.
+const SearchPostData = async () => {
+    const SearchInput = document.getElementById("search-input");
+    const SearchText = SearchInput.value;
+    const res = await fetch(`https://openapi.programming-hero.com/api/retro-forum/posts?category=${SearchText}`);
+    const data = await res.json();
+    // displayPosts(data, "search");
+    console.log(data);
+}
